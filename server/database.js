@@ -1,38 +1,26 @@
-const InitializeMongoDb = () => {
+const initializeMongoose = () => {
+    const mongoose = require('mongoose');
 
-    const { MongoClient } = require("mongodb");
-    // Connection URI
-    const uri = process.env.MONGODB_CONN_URI;
-    // Create a new MongoClient
-    const client = new MongoClient(uri, {
-        useUnifiedTopology: true
+    mongoose.set('useNewUrlParser', true);
+    mongoose.set('useFindAndModify', false);
+    mongoose.set('useCreateIndex', true);
+    mongoose.set('useUnifiedTopology', true);
+
+    mongoose.Promise = global.Promise;
+
+    mongoose.connection.on("error", () => {
+        throw new Error(`unable to connect to database: ${process.env.MONGODB_CONN_URI}`)
     });
+    
+    mongoose.connection.on("open", () => {
+        console.info(`MongoDb client connected to ${process.env.MONGODB_CONN_URI}`)
+    })
 
-    const connect = async () => {
-        await client.connect();
+    return mongoose;
 
-        // Establish and verify connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("[MongoDB] Connected to the database server successfully.");
+}
 
-        global.db = client.db(process.env.MONGODB_DB_NAME);
-        global.db.users = global.db.collection('user');
-    }
-
-    const close = async () => {
-        console.log("[MongoDB] Database connection is gracefully closed.");
-        return await client.close();
-    }
-
-    return {
-        client,
-        connect,
-        close
-    }
-
-};
-
-const mongoDb = InitializeMongoDb();
+const mongoDb = initializeMongoose();
 
 
 module.exports = {

@@ -1,17 +1,47 @@
+const User = require('../models/user');
+const faker = require('faker');
+const pick = require('lodash/pick');
+const yup = require('yup');
+
+const asAdmin = (req, res, next) => {
+    req.body.isAdmin = true;
+    next();
+};
+
+const checkUserProps = operation => async (req, res, next) => {
+
+    try {
+
+        let schema = undefined;
+
+        switch(operation){
+            case 'create':
+                schema = yup.object().shape({
+                    name: yup.string().required('İsim gereklidir.')
+                });
+
+                await schema.validate(req.body)
+
+            default:
+                break;
+        }
+
+        next();
+        
+    } catch (error) {
+        res.status(409).json({
+            error: error.message
+        })
+    }
+    
+}
 
 const create = async (req, res) => {
     try {
 
-        // const user = await User?.insertOne({
-        //     "name": "Oğuz Kurttutan"
-        // });
+        const user = await User.create(req.body);
 
-        // console.log(User)
-
-        // res.status(200).json(User);
-
-        console.log(global)
-        res.json('ds')
+        res.status(200).json(pick(user, ['_id', 'name']));
         
     } catch (error) {
         res.status(400).json({
@@ -21,5 +51,7 @@ const create = async (req, res) => {
 }
 
 module.exports = {
-    create
+    create,
+    asAdmin,
+    checkUserProps
 }

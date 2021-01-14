@@ -6,7 +6,7 @@ const {mongoDb} = require('./server/database');
     try {        
         const port =  process.env.PORT;
         await listen(port);
-        await mongoDb.connect();
+        await mongoDb.connect(process.env.MONGODB_CONN_URI);
         process.on('SIGINT', () => {
             console.info('SIGINT signal received: closing HTTP server')
             server.close(() => {
