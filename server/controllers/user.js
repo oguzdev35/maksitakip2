@@ -1,12 +1,7 @@
 const User = require('../models/user');
-const faker = require('faker');
 const pick = require('lodash/pick');
 const yup = require('yup');
 
-const asAdmin = (req, res, next) => {
-    req.body.isAdmin = true;
-    next();
-};
 
 const checkUserProps = operation => async (req, res, next) => {
 
@@ -52,6 +47,5 @@ const create = async (req, res) => {
 
 module.exports = {
     create,
-    asAdmin,
     checkUserProps
 }
