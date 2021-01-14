@@ -8,7 +8,6 @@ const checkAdminProps = operation => async (req, res, next) => {
 
         let schema = undefined;
 
-        console.log(process.env)
 
         switch(operation){
             case 'create':
@@ -69,7 +68,7 @@ const create = async (req, res) => {
     try {
         req.body.isAdmin = true;
         let user = await User.create(req.body);
-        
+
         user = pick(user, ['id', 'name', 'username', 'email', 'createdAt']);
 
         return res.status(200).json(user);
