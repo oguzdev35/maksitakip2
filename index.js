@@ -1,5 +1,5 @@
-const { server, listen } = require('./server');
-const databases = require('./database');
+const { server, listen } = require('./server/server');
+const databases = require('./server/database');
 
 (async function main(){
 
