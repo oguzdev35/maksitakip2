@@ -14,6 +14,10 @@ const checkAdminProps = operation => async (req, res, next) => {
             case 'create':
                 schema = yup.object().shape({
                     name: yup.string().required('İsim gereklidir.'),
+                    username: yup.string().required('Kullanıcı Adı gereklidir.'),
+                    email: yup.string().email('Eposta formatı uygun değildir.')
+                        .required('Eposta adresi gereklidir.'),
+                    password: yup.string().required('Şifre gereklidir.'),
                     api_root_key: yup.string().required('API anahtarı gereklidir.').test(
                         'match',
                         'Yanlış API anahtarı girdiniz.',
@@ -64,9 +68,13 @@ const checkForAdminExistence = async (req, res, next) => {
 const create = async (req, res) => {
     try {
         req.body.isAdmin = true;
-        const user = await User.create(req.body);
+        let user = await User.create(req.body);
 
-        res.status(200).json(pick(user, ['_id', 'name']));
+        console.log(user)
+
+        user = pick(user, ['id', 'name', 'username', 'email', 'createdAt']);
+
+        return res.status(200).json(user);
         
     } catch (error) {
         res.status(400).json({
