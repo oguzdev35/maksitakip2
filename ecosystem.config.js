@@ -8,7 +8,8 @@ module.exports = {
       env: {
         "PORT": 3000,
         "NODE_ENV": "development",
-        "MONGODB_CONN_URI":"mongodb://localhost:27017/maksitakip"
+        "MONGODB_CONN_URI":"mongodb://localhost:27017/maksitakip",
+        "MONGODB_DB_NAME": "maksitakip"
       }
     }
   ],

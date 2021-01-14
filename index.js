@@ -1,9 +1,7 @@
 const { server, listen } = require('./server/server');
-const databases = require('./server/database');
+const {mongoDb} = require('./server/database');
 
 (async function main(){
-
-    let mongoDb = databases.mongoDb();
 
     try {        
         const port =  process.env.PORT;

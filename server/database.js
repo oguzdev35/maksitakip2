@@ -1,4 +1,4 @@
-const mongoDb = () => {
+const InitializeMongoDb = () => {
 
     const { MongoClient } = require("mongodb");
     // Connection URI
@@ -14,6 +14,9 @@ const mongoDb = () => {
         // Establish and verify connection
         await client.db("admin").command({ ping: 1 });
         console.log("[MongoDB] Connected to the database server successfully.");
+
+        global.db = client.db(process.env.MONGODB_DB_NAME);
+        global.db.users = global.db.collection('user');
     }
 
     const close = async () => {
@@ -28,6 +31,8 @@ const mongoDb = () => {
     }
 
 };
+
+const mongoDb = InitializeMongoDb();
 
 
 module.exports = {
