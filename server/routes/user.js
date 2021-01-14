@@ -1,9 +1,10 @@
 const express = require('express');
+const authController = require('../controllers/auth');
 const userController = require('../controllers/user');
 
 const router = express.Router();
 
 router.route('/api/user')
-    .post(userController.checkUserProps('create'), userController.create);
+    .post(authController.requireSignin, userController.checkUserProps('create'), userController.create);
 
 module.exports = router;
