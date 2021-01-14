@@ -39,6 +39,28 @@ const checkAdminProps = operation => async (req, res, next) => {
     
 }
 
+const checkForAdminExistence = async (req, res, next) => {
+    try {
+
+        const admin = await User.findOne({
+            isAdmin: true
+        });
+
+        if(admin){
+            return res.status(403).json({
+                error: 'Daha Önce Yönetici Hesabı Oluşturulmuştur.'
+            })
+        } else {
+           next();
+        }
+        
+    } catch (error) {
+        res.status(400).json({
+            error: error.message
+        })
+    }
+} 
+
 const create = async (req, res) => {
     try {
         req.body.isAdmin = true;
@@ -55,5 +77,6 @@ const create = async (req, res) => {
 
 module.exports = {
     create,
-    checkAdminProps
+    checkAdminProps,
+    checkForAdminExistence
 }
