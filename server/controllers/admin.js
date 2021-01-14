@@ -69,9 +69,7 @@ const create = async (req, res) => {
     try {
         req.body.isAdmin = true;
         let user = await User.create(req.body);
-
-        console.log(user)
-
+        
         user = pick(user, ['id', 'name', 'username', 'email', 'createdAt']);
 
         return res.status(200).json(user);
