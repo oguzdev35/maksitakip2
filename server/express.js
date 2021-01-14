@@ -15,6 +15,7 @@ app.use(compression());
 app.use(cors());
 
 // Api Routing
+app.use('/', require('./routes/admin'));
 app.use('/', require('./routes/user')); 
 
 

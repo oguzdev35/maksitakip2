@@ -3,7 +3,7 @@ const userController = require('../controllers/user');
 
 const router = express.Router();
 
-router.route('/api/admin')
+router.route('/api/user')
     .post(userController.checkUserProps('create'), userController.asAdmin, userController.create);
 
 module.exports = router;
