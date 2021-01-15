@@ -16,10 +16,6 @@ const UserSchema = new mongoose.Schema({
             partialFilterExpression: {username: {$type: "string"}}
         }
     },
-    isAdmin: {
-        type: Boolean,
-        default: false
-    },
     email: {
         type: String,
         trim: true,
@@ -40,6 +36,14 @@ const UserSchema = new mongoose.Schema({
         default: Date.now
     },
     updatedAt: Date,
+    admin: {
+        type: Boolean,
+        default: false
+    },
+    removed: {
+        type: Boolean,
+        default: false
+    }
 });
 
 UserSchema
@@ -66,6 +70,14 @@ UserSchema.methods = {
     },
     filterProps: function(){
         return pick(this, ['id', 'name', 'username', 'email', 'createdAt']);
+    },
+    filterAuthProps: function(){
+        return pick(this, ['id', 'name', 'username', 'email', 'createdAt', 'admin']);
+    },
+    putToTheBin: async function(){
+        this.removed = true;
+        await this.save();
+        return this;
     }
 };
 

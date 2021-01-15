@@ -1,18 +1,19 @@
 const express = require('express');
-const authController = require('../controllers/auth');
-const userController = require('../controllers/user');
+const authCtrl = require('../controllers/auth');
+const userCtrl = require('../controllers/user');
 
 const router = express.Router();
 
 router.route('/api/user')
-    .post(authController.requireSignin, userController.create);
+    .post(authCtrl.requireSignin, userCtrl.create);
 
 router.route('/api/users')
-    .get(authController.requireSignin, userController.list);
+    .get(authCtrl.requireSignin, userCtrl.list);
 
 router.route('/api/user/:userId')
-    .get(authController.requireSignin, authController.hasAuthorization, userController.view);
-
-router.param('userId', userController.findById);
+    .get(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.view)
+    .delete(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.remove)
+    
+router.param('userId', userCtrl.findById);
 
 module.exports = router;

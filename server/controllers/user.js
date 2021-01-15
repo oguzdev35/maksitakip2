@@ -65,9 +65,24 @@ const view = async (req, res) => {
     }
 }
 
+const remove = async (req, res) => {
+    try {
+
+        await req.user.putToTheBin();
+
+        return res.status(200).json(req.user.filterProps());
+        
+    } catch (error) {
+        res.status(400).json({
+            error: error.message
+        })
+    }
+}
+
 module.exports = {
     create,
     list,
     view,
-    findById
+    findById,
+    remove
 }

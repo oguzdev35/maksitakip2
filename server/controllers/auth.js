@@ -1,6 +1,4 @@
 const User = require('../models/user');
-const pick = require('lodash/pick');
-const expressJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
 
 
@@ -29,7 +27,9 @@ const signin = async (req, res) => {
             });
         }
 
-        const token = jwt.sign( user.filterProps(), process.env.JWT_SECRET);
+        console.log(user.filterProps())
+
+        const token = jwt.sign( user.filterAuthProps(), process.env.JWT_SECRET);
 
         res.cookie("t", token, {
             expires: new Date(Date.now() + 9000000),
@@ -37,10 +37,8 @@ const signin = async (req, res) => {
             httpOnly: true
         });
 
-        user = pick(user, ['_id', 'name', 'username', 'email', 'createdAt'])
-
         return res.status(200).json({
-            token, user
+            token, user: user.filterProps()
         });
     
         
@@ -66,14 +64,15 @@ const signout = async (req, res) => {
     }
 }
 
-const requireSignin = expressJwt({
-    secret: process.env.JWT_SECRET,
-    userProperty: "auth",
-    algorithms: ['HS256']
-});
+const requireSignin = async (req, res, next) => {
+        const token = req.headers?.authorization?.split(' ')[1];
+        req.auth =  jwt.verify(token, process.env.JWT_SECRET);
+        next();
+}
 
-const hasAuthorization = async (req, res) => {
-    const authorized = req.user && req.auth && req.admin && req.user._id == req.auth._id;
+const hasAuthorization = async (req, res, next) => {
+    console.log(req.auth)
+    const authorized = req.user && req.auth && ((req.auth.admin) || (req.user._id == req.auth._id));
     if(!authorized){
         return res.status(401).json({
             error: "Kullanıcı yetkili değildir."
