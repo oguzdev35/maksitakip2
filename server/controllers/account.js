@@ -9,6 +9,13 @@ const mongoose = require('../database').mongoDb;
 const injectAccountOwner = async (req, res, next) => {
 
         req.owner_type = req.path?.split('/')[3];
+        req.body = {
+            ...req.body,
+            company: req.owner_type == 'company' ? true : false,
+            customer: req.customer?._id,
+            personal: req.personal_company?._id,
+            dealer: req.dealer_company?._id
+        }
         next();
 }
 

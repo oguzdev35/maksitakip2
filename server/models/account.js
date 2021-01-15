@@ -22,7 +22,10 @@ const AccountSchema = new mongoose.Schema({
     customer: {type: mongoose.Schema.ObjectId, ref: 'Customer'},
     personal: {type: mongoose.Schema.ObjectId, ref: 'Personal'},
     dealer: {type: mongoose.Schema.ObjectId, ref: 'Dealer'},
-    company: {type: mongoose.Schema.ObjectId, ref: 'Main'},
+    company: {
+        type: Boolean,
+        default: false
+    },
     updatedAt: Date,
     removed: {
         type: Boolean,
