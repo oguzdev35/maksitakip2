@@ -2,7 +2,10 @@ const mongoose = require('../database').mongoDb;
 const { encryptPassword, makeSalt } = require('../../utility/password');
 
 const UserSchema = new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: 'Kullanıcı İsim ve Soyisim gereklidir.'
+    },
     username: {
         type: String,
         trim: true,
@@ -71,15 +74,32 @@ UserSchema.path('hashed_password').validate(function(v){
     }
 }, null);
 
-UserSchema.post("save", function (error, doc, next) {
 
-    if (error.keyValue.email != null && error.name === "MongoError" && error.code === 11000) {
-      next(new Error('Bu eposta adresi sistemde kayıtlıdır, lütfen başka bir eposta adresi deneyiniz. '));
-    } else if (error.keyValue.username != null && error.name === "MongoError" && error.code === 11000) {
-      next(new Error("Bu kullanıcı adı sistemde kayıtlıdır, lütfen başka bir kullanıcı adı deneyiniz."));
-    } else {
-      next(error);
+const handleValidation = function(error, res, next) {
+    console.log(error.keyValue)
+    switch (error.name) {
+        case 'ValidationError':
+            next(new Error(error.message));
+            break;
+        case 'MongoError':
+            if(error.code == '11000'){
+                if(error.keyValue.username){
+                    next(new Error('Bu kullanıcı adı sistemimizde kayıtlıdır.'))
+                } else if(error.keyValue.email){
+                    next(new Error('Bu Eposta adresi sistemimizde kayıtlıdır.'));
+                }
+            }
+            next();
+            break;
+        default:
+            next();
+            break;
     }
-});
+};
+  
+UserSchema.post('save', handleValidation);
+UserSchema.post('update', handleValidation);
+UserSchema.post('findOneAndUpdate', handleValidation);
+UserSchema.post('insertMany', handleValidation);
 
 module.exports = mongoose.model('User', UserSchema);

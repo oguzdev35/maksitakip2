@@ -23,4 +23,6 @@ app.get('/', (req, res) => {
     res.send('Maksitakip WEB API Services');
 });
 
+
+
 module.exports = app;

@@ -5,6 +5,6 @@ const userController = require('../controllers/user');
 const router = express.Router();
 
 router.route('/api/user')
-    .post(authController.requireSignin, userController.checkUserProps('create'), userController.create);
+    .post(authController.requireSignin, userController.create);
 
 module.exports = router;
