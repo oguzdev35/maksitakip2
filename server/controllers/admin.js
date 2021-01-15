@@ -6,7 +6,7 @@ const checkForAdminExistence = async (req, res, next) => {
     try {
 
         const admin = await User.findOne({
-            isAdmin: true
+            admin: true
         });
 
         if(admin){
@@ -26,7 +26,7 @@ const checkForAdminExistence = async (req, res, next) => {
 
 const create = async (req, res) => {
     try {
-        req.body.isAdmin = true;
+        req.body.admin = true;
         let user = await User.create(req.body);
 
         user = pick(user, ['id', 'name', 'username', 'email', 'createdAt']);

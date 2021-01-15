@@ -29,7 +29,7 @@ const signin = async (req, res) => {
             });
         }
 
-        const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
+        const token = jwt.sign( user.filterProps(), process.env.JWT_SECRET);
 
         res.cookie("t", token, {
             expires: new Date(Date.now() + 9000000),
@@ -73,7 +73,7 @@ const requireSignin = expressJwt({
 });
 
 const hasAuthorization = async (req, res) => {
-    const authorized = req.user && req.auth && req.user._id == req.auth._id;
+    const authorized = req.user && req.auth && req.admin && req.user._id == req.auth._id;
     if(!authorized){
         return res.status(401).json({
             error: "Kullanıcı yetkili değildir."

@@ -1,5 +1,6 @@
 const mongoose = require('../database').mongoDb;
 const { encryptPassword, makeSalt } = require('../../utility/password');
+const pick = require('lodash/pick');
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -62,6 +63,9 @@ UserSchema.methods = {
         this._password = newPassword;
         this.password =newPassword;
         return;
+    },
+    filterProps: function(){
+        return pick(this, ['id', 'name', 'username', 'email', 'createdAt']);
     }
 };
 
@@ -76,7 +80,6 @@ UserSchema.path('hashed_password').validate(function(v){
 
 
 const handleValidation = function(error, res, next) {
-    console.log(error.keyValue)
     switch (error.name) {
         case 'ValidationError':
             next(new Error(error.message));
