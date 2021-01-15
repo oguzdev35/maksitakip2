@@ -18,6 +18,7 @@ app.use(cors());
 app.use('/', require('./routes/admin'));
 app.use('/', require('./routes/user')); 
 app.use('/', require('./routes/auth'));
+app.use('/', require('./routes/company'));
 
 app.get('/', (req, res) => {
     res.send('Maksitakip WEB API Services');

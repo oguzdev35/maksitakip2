@@ -36,6 +36,24 @@ const UserSchema = new mongoose.Schema({
         default: Date.now
     },
     updatedAt: Date,
+    company_info: {
+        name: String,
+        address: String,
+        contact_person: String,
+        phone1: String,
+        phone2: String,
+        fax: String,
+        email: {
+            type: String,
+            trim: true,
+            match: [/.+\@.+\..+/, "Lütfen geçerli bir email adresi giriniz."],
+        },
+        website: String,
+        tax_office: String,
+        company_title: String,
+        tax_number: String,
+        info: String
+    },
     admin: {
         type: Boolean,
         default: false
@@ -76,6 +94,9 @@ UserSchema.methods = {
     },
     filterForUpdate: function(obj){
         return pick(obj, ['name', 'username', 'email', 'password']);
+    },
+    filterForCompanyInfoInsertation: function(obj){
+        return pick(obj, [ 'name', 'address', 'contact_person', 'phone1', 'phone2', 'fax', 'email', 'website', 'tax_office', 'company_title', 'tax_number', 'info'])
     },
     putToTheBin: async function(){
         this.removed = true;
