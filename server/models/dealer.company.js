@@ -25,7 +25,7 @@ const DealerCompanySchema = new mongoose.Schema({
 
 DealerCompanySchema.methods = {
     filterProps: function(){
-        return pick(this, ['id', 'name', 'info', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'name', 'info', 'createdAt', 'updatedAt']);
     },
     filterForUpdate: function(obj){
         return pick(obj, ['name', 'info']);

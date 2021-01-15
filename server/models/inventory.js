@@ -1,23 +1,21 @@
 const mongoose = require('../database').mongoDb;
 const pick = require('lodash/pick');
 
-const ProductSchema = new mongoose.Schema({
-    name: {
+const InventorySchema = new mongoose.Schema({
+    info: {
         type: String,
-        required: true,
         trim: true
     },
     price: {
         type: Number,
         default: 0
     },
-    info: {
-        type: String,
-        trim: true
+    amount: {
+        type: Number,
+        default: 0
     },
-    categories: [
-        {type: mongoose.Schema.ObjectId, ref: 'ProductCategory'},
-    ],
+    store: {type: mongoose.Schema.ObjectId, ref: 'Store'},
+    product: {type: mongoose.Schema.ObjectId, ref: 'Product'},
     createdAt: {
         type: Date,
         default: Date.now
@@ -29,12 +27,12 @@ const ProductSchema = new mongoose.Schema({
     }
 });
 
-ProductSchema.methods = {
+InventorySchema.methods = {
     filterProps: function(){
-        return pick(this, ['_id', 'name', 'info', 'price', 'categories', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'info', 'price', 'amount', 'store', 'product', 'createdAt', 'updatedAt']);
     },
     filterForUpdate: function(obj){
-        return pick(obj, [ 'name', 'price', 'categories', 'info']);
+        return pick(obj, ['info', 'price', 'amount', 'store', 'product']);
     },
     putToTheBin: async function(){
         this.removed = true;
@@ -55,9 +53,9 @@ const handleValidation = function(error, res, next) {
     }
 };
   
-ProductSchema.post('save', handleValidation);
-ProductSchema.post('update', handleValidation);
-ProductSchema.post('findOneAndUpdate', handleValidation);
-ProductSchema.post('insertMany', handleValidation);
+InventorySchema.post('save', handleValidation);
+InventorySchema.post('update', handleValidation);
+InventorySchema.post('findOneAndUpdate', handleValidation);
+InventorySchema.post('insertMany', handleValidation);
 
-module.exports = mongoose.model('Product', ProductSchema);
+module.exports = mongoose.model('Inventory', InventorySchema);

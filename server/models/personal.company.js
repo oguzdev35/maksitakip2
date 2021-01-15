@@ -28,7 +28,7 @@ const PersonalCompanySchema = new mongoose.Schema({
 
 PersonalCompanySchema.methods = {
     filterProps: function(){
-        return pick(this, ['id', 'name', 'title', 'info', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'name', 'title', 'info', 'createdAt', 'updatedAt']);
     },
     filterForUpdate: function(obj){
         return pick(obj, ['name', 'title', 'info']);

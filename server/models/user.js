@@ -118,10 +118,10 @@ UserSchema.methods = {
         return;
     },
     filterProps: function(){
-        return pick(this, ['id', 'name', 'username', 'email', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'name', 'username', 'email', 'createdAt', 'updatedAt']);
     },
     filterAuthProps: function(){
-        return pick(this, ['id', 'name', 'username', 'email', 'createdAt', 'admin']);
+        return pick(this, ['_id', 'name', 'username', 'email', 'createdAt', 'admin']);
     },
     filterForUpdate: function(obj){
         return pick(obj, ['name', 'username', 'email', 'password']);

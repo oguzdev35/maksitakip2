@@ -28,10 +28,10 @@ const StoreSchema = new mongoose.Schema({
 
 StoreSchema.methods = {
     filterProps: function(){
-        return pick(this, ['id', 'name', 'info', 'address', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'name', 'info', 'address', 'createdAt', 'updatedAt']);
     },
     filterForUpdate: function(obj){
-        return pick(obj, ['name', 'name', 'info', 'address']);
+        return pick(obj, ['name', 'info', 'address']);
     },
     putToTheBin: async function(){
         this.removed = true;

@@ -24,10 +24,10 @@ const ProductCategorySchema = new mongoose.Schema({
 
 ProductCategorySchema.methods = {
     filterProps: function(){
-        return pick(this, ['id', 'name', 'info', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'name', 'info', 'createdAt', 'updatedAt']);
     },
     filterForUpdate: function(obj){
-        return pick(obj, ['name', 'name', 'info']);
+        return pick(obj, ['name', 'info']);
     },
     putToTheBin: async function(){
         this.removed = true;
