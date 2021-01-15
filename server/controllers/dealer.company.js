@@ -1,14 +1,13 @@
-const User = require('../models/user');
-const pick = require('lodash/pick');
+const DealerCompany = require('../models/dealer.company');
 const extend = require('lodash/extend');
-const mongoose = require('../database').mongoDb; 
+const mongoose = require('../database').mongoDb;
 
 const create = async (req, res) => {
     try {
 
-        let user = await User.create(req.body);
+        let dealer_company = await DealerCompany.create(req.body);
 
-        return res.status(200).json(user.filterProps());
+        return res.status(200).json(dealer_company.filterProps());
         
     } catch (error) {
         res.status(400).json({
@@ -20,11 +19,11 @@ const create = async (req, res) => {
 const list = async (req, res) => {
     try {
 
-        let users = await User.find({
+        let dealer_companys = await DealerCompany.find({
             removed: false
         }).select('id name');
 
-        return res.status(200).json(users);
+        return res.status(200).json(dealer_companys);
         
     } catch (error) {
         res.status(400).json({
@@ -37,27 +36,27 @@ const findById =  async (req, res, next, id) => {
 
     if( !mongoose.Types.ObjectId.isValid(id) ){
         return res.status(400).json({
-            error: 'Kullanıcı ID numarası geçersizdir.'
+            error: 'Personal ID numarası geçersizdir.'
         })
     }
 
     try {
 
-        let user = await User.findById(id);
+        let dealer_company = await DealerCompany.findById(id);
 
-        if(!user){
+        if(!dealer_company){
             return res.status(400).json({
-                error: 'Kullanıcı bulunamadı.'
+                error: 'Bayi bulunamadı.'
             })
         }
 
-        if(user.removed){
+        if(dealer_company.removed){
             return res.status(400).json({
-                error: 'Kullanıcı silinmiştir.'
+                error: 'Bayi silinmiştir.'
             })
         }
 
-        req.user = user;
+        req.dealer_company = dealer_company;
 
         next();
         
@@ -71,7 +70,7 @@ const findById =  async (req, res, next, id) => {
 const view = async (req, res) => {
     try {
 
-        return res.status(200).json(req.user.filterProps());
+        return res.status(200).json(req.dealer_company.filterProps());
         
     } catch (error) {
         res.status(400).json({
@@ -83,13 +82,13 @@ const view = async (req, res) => {
 const edit = async (req, res) => {
     try {
 
-        let user = req.user
+        let dealer_company = req.dealer_company
 
-        user = extend(user,  user.filterForUpdate(req.body));
+        dealer_company = extend(dealer_company,  dealer_company.filterForUpdate(req.body));
 
-        await user.save();
+        await dealer_company.save();
 
-        return res.status(200).json(user.filterProps());
+        return res.status(200).json(dealer_company.filterProps());
         
     } catch (error) {
         res.status(400).json({
@@ -101,9 +100,9 @@ const edit = async (req, res) => {
 const remove = async (req, res) => {
     try {
 
-        await req.user.putToTheBin();
+        await req.dealer_company.putToTheBin();
 
-        return res.status(200).json(req.user.filterProps());
+        return res.status(200).json(req.dealer_company.filterProps());
         
     } catch (error) {
         res.status(400).json({

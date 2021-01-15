@@ -1,14 +1,13 @@
-const User = require('../models/user');
-const pick = require('lodash/pick');
+const PersonalCompany = require('../models/personal.company');
 const extend = require('lodash/extend');
-const mongoose = require('../database').mongoDb; 
+const mongoose = require('../database').mongoDb;
 
 const create = async (req, res) => {
     try {
 
-        let user = await User.create(req.body);
+        let personal_company = await PersonalCompany.create(req.body);
 
-        return res.status(200).json(user.filterProps());
+        return res.status(200).json(personal_company.filterProps());
         
     } catch (error) {
         res.status(400).json({
@@ -20,11 +19,11 @@ const create = async (req, res) => {
 const list = async (req, res) => {
     try {
 
-        let users = await User.find({
+        let personal_companys = await PersonalCompany.find({
             removed: false
         }).select('id name');
 
-        return res.status(200).json(users);
+        return res.status(200).json(personal_companys);
         
     } catch (error) {
         res.status(400).json({
@@ -37,27 +36,27 @@ const findById =  async (req, res, next, id) => {
 
     if( !mongoose.Types.ObjectId.isValid(id) ){
         return res.status(400).json({
-            error: 'Kullanıcı ID numarası geçersizdir.'
+            error: 'Personal ID numarası geçersizdir.'
         })
     }
 
     try {
 
-        let user = await User.findById(id);
+        let personal_company = await PersonalCompany.findById(id);
 
-        if(!user){
+        if(!personal_company){
             return res.status(400).json({
-                error: 'Kullanıcı bulunamadı.'
+                error: 'Personel bulunamadı.'
             })
         }
 
-        if(user.removed){
+        if(personal_company.removed){
             return res.status(400).json({
-                error: 'Kullanıcı silinmiştir.'
+                error: 'Personel silinmiştir.'
             })
         }
 
-        req.user = user;
+        req.personal_company = personal_company;
 
         next();
         
@@ -71,7 +70,7 @@ const findById =  async (req, res, next, id) => {
 const view = async (req, res) => {
     try {
 
-        return res.status(200).json(req.user.filterProps());
+        return res.status(200).json(req.personal_company.filterProps());
         
     } catch (error) {
         res.status(400).json({
@@ -83,13 +82,13 @@ const view = async (req, res) => {
 const edit = async (req, res) => {
     try {
 
-        let user = req.user
+        let personal_company = req.personal_company
 
-        user = extend(user,  user.filterForUpdate(req.body));
+        personal_company = extend(personal_company,  personal_company.filterForUpdate(req.body));
 
-        await user.save();
+        await personal_company.save();
 
-        return res.status(200).json(user.filterProps());
+        return res.status(200).json(personal_company.filterProps());
         
     } catch (error) {
         res.status(400).json({
@@ -101,9 +100,9 @@ const edit = async (req, res) => {
 const remove = async (req, res) => {
     try {
 
-        await req.user.putToTheBin();
+        await req.personal_company.putToTheBin();
 
-        return res.status(200).json(req.user.filterProps());
+        return res.status(200).json(req.personal_company.filterProps());
         
     } catch (error) {
         res.status(400).json({

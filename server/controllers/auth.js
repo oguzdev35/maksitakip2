@@ -77,7 +77,6 @@ const requireSignin = async (req, res, next) => {
 }
 
 const hasAuthorization = async (req, res, next) => {
-    console.log(req.auth)
     const authorized = req.user && req.auth && ((req.auth.admin) || (req.user._id == req.auth._id));
     if(!authorized){
         return res.status(401).json({

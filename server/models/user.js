@@ -5,7 +5,8 @@ const pick = require('lodash/pick');
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: 'Kullanıcı İsim ve Soyisim gereklidir.'
+        required: 'Kullanıcı İsim ve Soyisim gereklidir.',
+        trim: true
     },
     username: {
         type: String,
@@ -37,22 +38,52 @@ const UserSchema = new mongoose.Schema({
     },
     updatedAt: Date,
     company_info: {
-        name: String,
-        address: String,
-        contact_person: String,
-        phone1: String,
-        phone2: String,
+        name: {
+            type: String,
+            trim: true
+        },
+        address: {
+            type: String,
+            trim: true
+        },
+        contact_person: {
+            type: String,
+            trim: true
+        },
+        phone1: {
+            type: String,
+            trim: true
+        },
+        phone2: {
+            type: String,
+            trim: true
+        },
         fax: String,
         email: {
             type: String,
             trim: true,
             match: [/.+\@.+\..+/, "Lütfen geçerli bir email adresi giriniz."],
         },
-        website: String,
-        tax_office: String,
-        company_title: String,
-        tax_number: String,
-        info: String
+        website: {
+            type: String,
+            trim: true
+        },
+        tax_office: {
+            type: String,
+            trim: true
+        },
+        company_title: {
+            type: String,
+            trim: true
+        },
+        tax_number: {
+            type: String,
+            trim: true
+        },
+        info: {
+            type: String,
+            trim: true
+        }
     },
     admin: {
         type: Boolean,
@@ -87,7 +118,7 @@ UserSchema.methods = {
         return;
     },
     filterProps: function(){
-        return pick(this, ['id', 'name', 'username', 'email', 'createdAt']);
+        return pick(this, ['id', 'name', 'username', 'email', 'createdAt', 'updatedAt']);
     },
     filterAuthProps: function(){
         return pick(this, ['id', 'name', 'username', 'email', 'createdAt', 'admin']);
