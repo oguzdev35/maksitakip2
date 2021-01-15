@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const pick = require('lodash/pick');
+const extend = require('lodash/extend');
 const mongoose = require('../database').mongoDb;
 
 const create = async (req, res) => {
@@ -19,7 +20,7 @@ const create = async (req, res) => {
 const list = async (req, res) => {
     try {
 
-        let users = await User.find({});
+        let users = await User.find({}).select('id name');
 
         return res.status(200).json(users);
         
@@ -42,6 +43,12 @@ const findById =  async (req, res, next, id) => {
 
         let user = await User.findById(id);
 
+        if(!user){
+            res.status(400).json({
+                error: 'Kullanıcı bulunamadı.'
+            })
+        }
+
         req.user = user;
 
         next();
@@ -57,6 +64,24 @@ const view = async (req, res) => {
     try {
 
         return res.status(200).json(req.user.filterProps());
+        
+    } catch (error) {
+        res.status(400).json({
+            error: error.message
+        })
+    }
+}
+
+const edit = async (req, res) => {
+    try {
+
+        let user = req.user
+
+        user = extend(user,  user.filterForUpdate(req.body));
+
+        await user.save();
+
+        return res.status(200).json(user.filterProps());
         
     } catch (error) {
         res.status(400).json({
@@ -84,5 +109,6 @@ module.exports = {
     list,
     view,
     findById,
-    remove
+    remove,
+    edit
 }

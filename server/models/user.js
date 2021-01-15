@@ -74,11 +74,14 @@ UserSchema.methods = {
     filterAuthProps: function(){
         return pick(this, ['id', 'name', 'username', 'email', 'createdAt', 'admin']);
     },
+    filterForUpdate: function(obj){
+        return pick(obj, ['name', 'username', 'email', 'password']);
+    },
     putToTheBin: async function(){
         this.removed = true;
         await this.save();
         return this;
-    }
+    },
 };
 
 UserSchema.path('hashed_password').validate(function(v){

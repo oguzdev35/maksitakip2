@@ -13,7 +13,8 @@ router.route('/api/users')
 router.route('/api/user/:userId')
     .get(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.view)
     .delete(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.remove)
-    
+    .put(authCtrl.requireSignin, authCtrl.hasAuthorization, userCtrl.edit);
+
 router.param('userId', userCtrl.findById);
 
 module.exports = router;
