@@ -85,6 +85,7 @@ const UserSchema = new mongoose.Schema({
             trim: true
         }
     },
+    accounts: [{type: mongoose.Schema.ObjectId, ref: 'Account'}],
     admin: {
         type: Boolean,
         default: false

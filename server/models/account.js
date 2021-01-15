@@ -1,25 +1,28 @@
 const mongoose = require('../database').mongoDb;
 const pick = require('lodash/pick');
 
-const PersonalCompanySchema = new mongoose.Schema({
+const AccountSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        trim: true
-    },
-    title: {
-        type: String,
         trim: true
     },
     info: {
         type: String,
         trim: true
     },
-    accounts: [{type: mongoose.Schema.ObjectId, ref: 'Account'}],
+    balance: {
+        type: Number,
+        default: 0
+    },
     createdAt: {
         type: Date,
         default: Date.now
     },
+    customer: {type: mongoose.Schema.ObjectId, ref: 'Customer'},
+    personal: {type: mongoose.Schema.ObjectId, ref: 'Personal'},
+    dealer: {type: mongoose.Schema.ObjectId, ref: 'Dealer'},
+    company: {type: mongoose.Schema.ObjectId, ref: 'Main'},
     updatedAt: Date,
     removed: {
         type: Boolean,
@@ -27,12 +30,12 @@ const PersonalCompanySchema = new mongoose.Schema({
     }
 });
 
-PersonalCompanySchema.methods = {
+AccountSchema.methods = {
     filterProps: function(){
-        return pick(this, ['_id', 'name', 'title', 'info', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'name', 'info', 'balance', 'createdAt', 'updatedAt']);
     },
     filterForUpdate: function(obj){
-        return pick(obj, ['name', 'title', 'info']);
+        return pick(obj, ['name', 'info', 'address']);
     },
     putToTheBin: async function(){
         this.removed = true;
@@ -53,9 +56,9 @@ const handleValidation = function(error, res, next) {
     }
 };
   
-PersonalCompanySchema.post('save', handleValidation);
-PersonalCompanySchema.post('update', handleValidation);
-PersonalCompanySchema.post('findOneAndUpdate', handleValidation);
-PersonalCompanySchema.post('insertMany', handleValidation);
+AccountSchema.post('save', handleValidation);
+AccountSchema.post('update', handleValidation);
+AccountSchema.post('findOneAndUpdate', handleValidation);
+AccountSchema.post('insertMany', handleValidation);
 
-module.exports = mongoose.model('PersonalCompany', PersonalCompanySchema);
+module.exports = mongoose.model('Account', AccountSchema);

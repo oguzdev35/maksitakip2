@@ -61,6 +61,7 @@ const CustomerSchema = new mongoose.Schema({
             partialFilterExpression: {email: {$type: "string"}}
         }
     },
+    accounts: [{type: mongoose.Schema.ObjectId, ref: 'Account'}],
     address: {
         country: {
             type: String,

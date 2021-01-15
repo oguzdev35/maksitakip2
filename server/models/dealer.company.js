@@ -11,6 +11,7 @@ const DealerCompanySchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    accounts: [{type: mongoose.Schema.ObjectId, ref: 'Account'}],
     createdAt: {
         type: Date,
         default: Date.now
