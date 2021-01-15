@@ -66,8 +66,14 @@ const signout = async (req, res) => {
 
 const requireSignin = async (req, res, next) => {
         const token = req.headers?.authorization?.split(' ')[1];
-        req.auth =  jwt.verify(token, process.env.JWT_SECRET);
-        next();
+        jwt.verify(token, process.env.JWT_SECRET, function(error, decoded) {
+            if(error){
+                return res.status(401).json('Bu servisi kullanmak için kullanıcı girişi yapmanız gerekiyor');
+            }
+            req.auth = decoded;
+            next();
+        });
+        
 }
 
 const hasAuthorization = async (req, res, next) => {
