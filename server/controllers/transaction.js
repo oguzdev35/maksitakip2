@@ -23,12 +23,25 @@ const injectBodyProps = type => (req, res, next) => {
 }
 
 const create = async (req, res) => {
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    const opts = { session, new: true };
+
     try {
+
+        
+
+        await session.commitTransaction();
+        session.endSession();
 
         return res.status(200).json(req.body);
         
     } catch (error) {
-        res.status(400).json({
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(400).json({
             error: error.message
         })
     }
