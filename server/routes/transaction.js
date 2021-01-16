@@ -33,11 +33,11 @@ router.route('/api/transaction/from/external/to/company/:destAccountId')
 router.route('/api/transaction/from/company/:sourceAccountId/to/external')
     .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(2), transactionCtrl.create);
 
-router.route('/api/transaction/from/personal/:personalId/:accountId/to/company/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/from/personal/:personalId/:sourceAccountId/to/company/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(3), transactionCtrl.create)
 
-router.route('/api/transaction/from/company/:accountId/to/personal/:personalId/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/from/company/:sourceAccountId/to/personal/:personalId/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(4), transactionCtrl.create)
 
 router.route('/api/transaction/from/dealer/:dealerId/:accountId/to/company/:accountId')
     .post(authCtrl.requireSignin)

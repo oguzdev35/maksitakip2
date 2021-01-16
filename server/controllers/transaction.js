@@ -6,7 +6,9 @@ const Account = require('../models/account');
 const injectBodyProps = type => async (req, res, next) => {
     req.body = {
         ...req.body,
-        type: type
+        type: type,
+        source: req.params.sourceAccountId,
+        dest: req.params.destAccountId
     }
 
     req.meta = {
@@ -20,8 +22,6 @@ const injectBodyProps = type => async (req, res, next) => {
 
         switch (type) {
             case 1:
-                req.body.source = null;
-                req.body.dest = req.params.destAccountId
                 req.meta.query.dest = {
                     _id: req.params.destAccountId,
                     company: true
@@ -33,8 +33,6 @@ const injectBodyProps = type => async (req, res, next) => {
                 req.meta.initialBalance.dest = accountDest.balance;
                 break;
             case 2:
-                req.body.source = req.params.sourceAccountId;
-                req.body.dest = null
 
                 req.meta.query.source = {
                     _id: req.params.sourceAccountId,
@@ -47,7 +45,51 @@ const injectBodyProps = type => async (req, res, next) => {
                     throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
                 }
                 req.meta.initialBalance.source = accountSource.balance;
-                break;  
+                break;
+            case 3:
+                req.meta.query = {
+                    dest: {
+                        _id: req.params.destAccountId,
+                        company: true
+                    },
+                    source: {
+                        _id: req.params.sourceAccountId,
+                        personal: req.params.personalId
+                    }
+                }
+                accountDest = await Account.findOne(req.meta.query.dest);
+                accountSource = await Account.findOne(req.meta.query.source);
+                if(!accountDest){
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                }
+                if(!accountSource){
+                    throw new Error('Bu kasa hesabı personele bağlı değildir.')
+                }
+                req.meta.initialBalance.dest = accountDest.balance;
+                req.meta.initialBalance.source = accountSource.balance;
+                break;
+            case 4:
+                req.meta.query = {
+                    source: {
+                        _id: req.params.sourceAccountId,
+                        company: true
+                    },
+                    dest: {
+                        _id: req.params.destAccountId,
+                        personal: req.params.personalId
+                    }
+                }
+                accountDest = await Account.findOne(req.meta.query.dest);
+                accountSource = await Account.findOne(req.meta.query.source);
+                if(!accountSource){
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                }
+                if(!accountDest){
+                    throw new Error('Bu kasa hesabı personele bağlı değildir.')
+                }
+                req.meta.initialBalance.dest = accountDest.balance;
+                req.meta.initialBalance.source = accountSource.balance;
+                break;    
             default:
                 break;
         }
@@ -98,6 +140,38 @@ const create = async (req, res) => {
                 }
                 break;
 
+            case 3:
+                accountSource = await Account.findOneAndUpdate(req.meta.query.source, {
+                    $push: {transactions: transaction._id},
+                    $inc: {balance: ((-1) * req.body.amount)}
+                }, opts);
+                if(!accountSource || (req.meta.initialBalance.source != accountSource.balance + req.body.amount)){
+                    throw new Error('İşlem oluşturulamadı.')
+                }
+                accountDest = await Account.findOneAndUpdate(req.meta.query.dest, {
+                    $push: {transactions: transaction._id},
+                    $inc: {balance: req.body.amount}
+                }, opts);
+                if(!accountDest || (req.meta.initialBalance.dest != accountDest.balance - req.body.amount)){
+                    throw new Error('İşlem oluşturulamadı.')
+                }
+                break;
+            case 4:
+                accountSource = await Account.findOneAndUpdate(req.meta.query.source, {
+                    $push: {transactions: transaction._id},
+                    $inc: {balance: ((-1) * req.body.amount)}
+                }, opts);
+                if(!accountSource || (req.meta.initialBalance.source != accountSource.balance + req.body.amount)){
+                    throw new Error('İşlem oluşturulamadı.')
+                }
+                accountDest = await Account.findOneAndUpdate(req.meta.query.dest, {
+                    $push: {transactions: transaction._id},
+                    $inc: {balance: req.body.amount}
+                }, opts);
+                if(!accountDest || (req.meta.initialBalance.dest != accountDest.balance - req.body.amount)){
+                    throw new Error('İşlem oluşturulamadı.')
+                }
+                break;
             
             default:
                 break;
