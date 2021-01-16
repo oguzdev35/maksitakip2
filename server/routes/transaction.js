@@ -8,11 +8,11 @@ const customerCtrl = require('../controllers/customer');
 
 const router = express.Router();
 
-router.route('/api/transaction/from/external/to/company/:accountId')
-    .post(authCtrl.requireSignin, transactionCtrl.create)
+router.route('/api/transaction/from/external/to/company/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(1), transactionCtrl.create);
 
-router.route('/api/transaction/from/company/:accountId/to/external')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/from/company/:sourceAccountId/to/external')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(2), transactionCtrl.create);
 
 router.route('/api/transaction/from/personal/:personalId/:accountId/to/company/:accountId')
     .post(authCtrl.requireSignin)
@@ -49,11 +49,5 @@ router.route('/api/transaction/from/customer/:customerId/:accountId/to/company/:
 
 router.route('/api/transaction/from/company/:accountId/to/customer/:customerId/:accountId')
     .post(authCtrl.requireSignin);
-
-
-router.param('accountId', accountCtrl.findById);
-router.param('personalId', personalCtrl.findById);
-router.param('dealerId', dealerCtrl.findById);
-router.param('customerId', customerCtrl.findById);
 
 module.exports = router;

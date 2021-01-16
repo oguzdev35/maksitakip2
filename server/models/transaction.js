@@ -1,6 +1,25 @@
 const mongoose = require('../database').mongoDb;
 const pick = require('lodash/pick');
 
+/**
+ * transfer: {
+ *      1: transfer Money from external to Company
+ *      2: transfer Money from Company from external
+ *      3: transfer Money from Personal to Company
+ *      4: transfer Money from Company from Personal
+ *      5: transfer Money from Dealer to Company
+ *      6: transfer Money from Company from Dealer
+ *      7: transfer Money from Dealer to Personal
+ *      8: transfer Money from Personal from Dealer
+ *      9: transfer Service from Customer to Company
+ *      10: transfer Service from Company from Customer
+ *      11: transfer Product from Customer to Company
+ *      12: transfer Product from Company from Customer
+ *      13: transfer Money from Customer to Company
+ *      14: transfer Money from Company from Customer
+ * }
+ */
+
 const TransactionSchema = new mongoose.Schema({
     info: {
         type: String,
@@ -16,7 +35,7 @@ const TransactionSchema = new mongoose.Schema({
         default: 0
     },
     source: {type: mongoose.Schema.ObjectId, ref: 'Account'},
-    destination: {type: mongoose.Schema.ObjectId, ref: 'Account'},
+    dest: {type: mongoose.Schema.ObjectId, ref: 'Account'},
     service: {type: mongoose.Schema.ObjectId, ref: 'Service'},
     goods: {
         product: {type: mongoose.Schema.ObjectId, ref: 'Product'},
