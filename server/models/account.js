@@ -22,6 +22,9 @@ const AccountSchema = new mongoose.Schema({
     customer: {type: mongoose.Schema.ObjectId, ref: 'Customer'},
     personal: {type: mongoose.Schema.ObjectId, ref: 'PersonalCompany'},
     dealer: {type: mongoose.Schema.ObjectId, ref: 'DealerCompany'},
+    transactions: [
+        {type: mongoose.Schema.ObjectId, ref: 'Transaction'},
+    ],
     company: {
         type: Boolean,
         default: false

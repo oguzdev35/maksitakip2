@@ -9,7 +9,7 @@ const customerCtrl = require('../controllers/customer');
 const router = express.Router();
 
 router.route('/api/transaction/from/external/to/company/:accountId')
-    .post(authCtrl.requireSignin)
+    .post(authCtrl.requireSignin, transactionCtrl.create)
 
 router.route('/api/transaction/from/company/:accountId/to/external')
     .post(authCtrl.requireSignin)
