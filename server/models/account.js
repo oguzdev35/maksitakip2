@@ -20,8 +20,8 @@ const AccountSchema = new mongoose.Schema({
         default: Date.now
     },
     customer: {type: mongoose.Schema.ObjectId, ref: 'Customer'},
-    personal: {type: mongoose.Schema.ObjectId, ref: 'Personal'},
-    dealer: {type: mongoose.Schema.ObjectId, ref: 'Dealer'},
+    personal: {type: mongoose.Schema.ObjectId, ref: 'PersonalCompany'},
+    dealer: {type: mongoose.Schema.ObjectId, ref: 'DealerCompany'},
     company: {
         type: Boolean,
         default: false
@@ -35,10 +35,10 @@ const AccountSchema = new mongoose.Schema({
 
 AccountSchema.methods = {
     filterProps: function(){
-        return pick(this, ['_id', 'name', 'info', 'balance', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'name', 'info', 'balance', 'personal', 'company', 'dealer', 'customer', 'createdAt', 'updatedAt']);
     },
     filterForUpdate: function(obj){
-        return pick(obj, ['name', 'info', 'address']);
+        return pick(obj, ['name', 'info', 'balance', 'personal', 'company', 'dealer', 'customer']);
     },
     putToTheBin: async function(){
         this.removed = true;

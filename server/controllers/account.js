@@ -91,7 +91,23 @@ const listAll = async (req, res) => {
 
         let accounts = await Account.find({
             removed: false
-        }).select('id name');
+        }).select('id name')
+        .populate((
+            [
+                {
+                    path: 'personal',
+                    select: '_id name',
+                },
+                {
+                    path: 'dealer',
+                    select: '_id name',
+                },
+                {
+                    path: 'customer',
+                    select: '_id name',
+                }
+            ]
+        ))
 
         return res.status(200).json(accounts);
         
@@ -127,7 +143,23 @@ const listByCategory = async (req, res) => {
         let accounts = await Account.find({
             removed: false,
             ...query
-        }).select('id name');
+        }).select('id name')
+        .populate((
+            [
+                {
+                    path: 'personal',
+                    select: '_id name',
+                },
+                {
+                    path: 'dealer',
+                    select: '_id name',
+                },
+                {
+                    path: 'customer',
+                    select: '_id name',
+                }
+            ]
+        ));
 
         return res.status(200).json(accounts);
         
@@ -160,7 +192,23 @@ const listByOwner = async (req, res) => {
         let accounts = await Account.find({
             removed: false,
             ...query
-        }).select('id name');
+        }).select('id name')
+        .populate((
+            [
+                {
+                    path: 'personal',
+                    select: '_id name',
+                },
+                {
+                    path: 'dealer',
+                    select: '_id name',
+                },
+                {
+                    path: 'customer',
+                    select: '_id name',
+                }
+            ]
+        ));
 
         return res.status(200).json(accounts);
         
@@ -181,7 +229,31 @@ const findById =  async (req, res, next, id) => {
 
     try {
 
-        let account = await Account.findById(id);
+        let account = undefined;
+
+        if(req.method == 'GET'){
+
+            account = await Account.findById(id)
+                .populate((
+                    [
+                        {
+                            path: 'personal',
+                            select: '_id name',
+                        },
+                        {
+                            path: 'dealer',
+                            select: '_id name',
+                        },
+                        {
+                            path: 'customer',
+                            select: '_id name',
+                        }
+                    ]
+                ));
+
+        } else {
+            account = await Account.findById(id);
+        }
 
         if(!account){
             return res.status(400).json({
