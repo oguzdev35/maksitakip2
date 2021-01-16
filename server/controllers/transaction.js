@@ -2,8 +2,10 @@ const Transaction = require('../models/transaction');
 const extend = require('lodash/extend');
 const mongoose = require('../database').mongoDb;
 const Account = require('../models/account');
+const User = require('../models/user');
+const Customer = require('../models/customer');
 
-const transfer = async (req, transaction, opts) => {
+const transfer = async (req, transaction, opts, session) => {
 
     let accountSource = undefined;
     let accountDest = undefined;
@@ -27,6 +29,24 @@ const transfer = async (req, transaction, opts) => {
         if(!accountDest || (req.meta.initialBalance.dest != accountDest.balance - req.body.amount)){
             throw new Error('İşlem oluşturulamadı.')
         }
+    }
+
+
+ 
+    if(req.body.type == 9){
+        const customer = await Customer.findOne({
+            _id: req.meta.query.source.customer
+        }).session(session);
+
+        await customer.services.selled.push({
+            service: req.body.serviceId,
+            startDate: req.body.startDate,
+            duration: req.body.duration
+        });
+
+        await customer.save();
+
+        console.log(JSON.stringify(customer, null, 4));
     }
 
 }
@@ -365,7 +385,7 @@ const create = async (req, res) => {
             throw new Error('İşlem oluşturulamadı.');
         }
 
-        await transfer(req, transaction, opts);
+        await transfer(req, transaction, opts, session);
 
         await session.commitTransaction();
         session.endSession();

@@ -8,8 +8,6 @@ const mongoose = require('../database').mongoDb;
 
 const injectAccountOwner = (operation) => (owner_type) => async (req, res, next) => {
 
-    console.log(req.personal_company)
-
     if(operation == 'create' || operation == 'list_by_owner'){
 
         req.owner_type = owner_type;

@@ -27,8 +27,6 @@ const signin = async (req, res) => {
             });
         }
 
-        console.log(user.filterProps())
-
         const token = jwt.sign( user.filterAuthProps(), process.env.JWT_SECRET);
 
         res.cookie("t", token, {

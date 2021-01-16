@@ -62,6 +62,22 @@ const CustomerSchema = new mongoose.Schema({
         }
     },
     accounts: [{type: mongoose.Schema.ObjectId, ref: 'Account'}],
+    services: {
+        selled: [   // selled by our company
+            {
+                service: {type: mongoose.Schema.ObjectId, ref: 'Service'},
+                startDate: Date,
+                duration: Number,
+            }
+        ],
+        bought: [   // bought by our company
+            {
+                service: {type: mongoose.Schema.ObjectId, ref: 'Service'},
+                startDate: Date,
+                duration: Number,
+            }
+        ]
+    },
     address: {
         country: {
             type: String,
@@ -107,10 +123,10 @@ const CustomerSchema = new mongoose.Schema({
 
 CustomerSchema.methods = {
     filterProps: function(){
-        return pick(this, ['_id', 'person', 'name', 'contact_person', 'info', 'phones', 'fax', 'email', 'address', 'tax_info', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'person', 'name', 'contact_person', 'info', 'phones', 'fax', 'email', 'address', 'tax_info', 'services', 'createdAt', 'updatedAt']);
     },
     filterForUpdate: function(obj){
-        return pick(obj, ['_id', 'person', 'name', 'contact_person', 'info', 'phones', 'fax', 'email', 'address', 'tax_info', 'createdAt']);
+        return pick(obj, ['_id', 'person', 'name', 'contact_person', 'info', 'phones', 'fax', 'email', 'address', 'tax_info', 'services', 'createdAt']);
     },
     putToTheBin: async function(){
         this.removed = true;
