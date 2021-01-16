@@ -38,7 +38,7 @@ const AccountSchema = new mongoose.Schema({
 
 AccountSchema.methods = {
     filterProps: function(){
-        return pick(this, ['_id', 'name', 'info', 'balance', 'personal', 'company', 'dealer', 'customer', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'name', 'info', 'balance', 'personal', 'company', 'dealer', 'customer', 'transactions', 'createdAt', 'updatedAt']);
     },
     filterForUpdate: function(obj){
         return pick(obj, ['name', 'info', 'balance', 'personal', 'company', 'dealer', 'customer']);
