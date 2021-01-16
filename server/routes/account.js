@@ -17,6 +17,23 @@ router.route('/api/account/personal/:personalId')
 router.route('/api/account/dealer/:dealerId')
     .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner('create')('dealer') ,accountCtrl.create);
 
+router.route('/api/accounts/company')
+    .get(authCtrl.requireSignin, accountCtrl.injectAccountOwner('list_by_category')('company') ,accountCtrl.listByCategory);
+router.route('/api/accounts/personal')
+    .get(authCtrl.requireSignin, accountCtrl.injectAccountOwner('list_by_category')('personal') ,accountCtrl.listByCategory);
+router.route('/api/accounts/dealer')
+    .get(authCtrl.requireSignin, accountCtrl.injectAccountOwner('list_by_category')('dealer') ,accountCtrl.listByCategory);
+router.route('/api/accounts/customer')
+    .get(authCtrl.requireSignin, accountCtrl.injectAccountOwner('list_by_category')('customer') ,accountCtrl.listByCategory);
+
+router.route('/api/accounts/personal/:personalId')
+    .get(authCtrl.requireSignin, accountCtrl.injectAccountOwner('list_by_owner')('personal') ,accountCtrl.listByOwner);
+router.route('/api/accounts/dealer/:dealerId')
+    .get(authCtrl.requireSignin, accountCtrl.injectAccountOwner('list_by_owner')('dealer') ,accountCtrl.listByOwner);
+router.route('/api/accounts/customer/:customerId')
+    .get(authCtrl.requireSignin, accountCtrl.injectAccountOwner('list_by_owner')('customer') ,accountCtrl.listByOwner);
+
+
 router.route('/api/accounts')
     .get(authCtrl.requireSignin, accountCtrl.listAll);
 

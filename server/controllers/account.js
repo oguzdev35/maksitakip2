@@ -10,7 +10,7 @@ const injectAccountOwner = (operation) => (owner_type) => async (req, res, next)
 
     console.log(req.personal_company)
 
-    if(operation == 'create'){
+    if(operation == 'create' || operation == 'list_by_owner'){
 
         req.owner_type = owner_type;
         req.body = {
@@ -21,6 +21,10 @@ const injectAccountOwner = (operation) => (owner_type) => async (req, res, next)
             dealer: req.dealer_company?._id
         }
 
+    }
+
+    if(operation == 'list_by_category'){
+        req.owner_type = owner_type;
     }
 
     next();
@@ -95,6 +99,75 @@ const listAll = async (req, res) => {
         res.status(400).json({
             error: error.message
         })
+    }
+}
+
+const listByCategory = async (req, res) => {
+    try {
+
+        let query = {};
+
+        switch (req.owner_type) {
+            case 'company':
+                query = {company: true};
+                break;
+            case 'personal':
+                query = {personal: {$exists: true}}
+                break;
+            case 'dealer':
+                query = {dealer: {$exists: true}}
+                break;
+            case 'customer':
+                query = {customer: {$exists: true}}
+                break;
+            default:
+                break;
+        }
+
+        let accounts = await Account.find({
+            removed: false,
+            ...query
+        }).select('id name');
+
+        return res.status(200).json(accounts);
+        
+    } catch (error) {
+        return res.status(400).json({
+            error: error.message
+        });
+    }
+}
+
+const listByOwner = async (req, res) => {
+    try {
+
+        let query = {};
+
+        switch (req.owner_type) {
+            case 'personal':
+                query = {personal: req.body.personal}
+                break;
+            case 'dealer':
+                query = {dealer: req.body.dealer}
+                break;
+            case 'customer':
+                query = {customer: req.body.customer}
+                break;
+            default:
+                break;
+        }
+
+        let accounts = await Account.find({
+            removed: false,
+            ...query
+        }).select('id name');
+
+        return res.status(200).json(accounts);
+        
+    } catch (error) {
+        return res.status(400).json({
+            error: error.message
+        });
     }
 }
 
@@ -184,5 +257,7 @@ module.exports = {
     findById,
     remove,
     edit,
-    injectAccountOwner
+    injectAccountOwner,
+    listByCategory,
+    listByOwner
 }
