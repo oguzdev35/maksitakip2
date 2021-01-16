@@ -18,7 +18,7 @@ router.route('/api/account/dealer/:dealerId')
     .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner('create')('dealer') ,accountCtrl.create);
 
 router.route('/api/accounts')
-    .get(authCtrl.requireSignin, accountCtrl.list);
+    .get(authCtrl.requireSignin, accountCtrl.listAll);
 
 router.route('/api/account/:accountId')
     .get(authCtrl.requireSignin, accountCtrl.view)

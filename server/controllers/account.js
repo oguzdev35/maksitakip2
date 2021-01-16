@@ -8,6 +8,8 @@ const mongoose = require('../database').mongoDb;
 
 const injectAccountOwner = (operation) => (owner_type) => async (req, res, next) => {
 
+    console.log(req.personal_company)
+
     if(operation == 'create'){
 
         req.owner_type = owner_type;
@@ -34,18 +36,33 @@ const create = async (req, res) => {
 
     try {
         let [account] = await Account.create([req.body], opts);
+        if(!account){
+            new Error('Hesap oluşturulamadı.')
+        }
         switch (req.owner_type) {
             case 'company':
-                await User.findOneAndUpdate({admin:true}, {$push: {accounts: account._id}}, opts);
+                const user = await User.findOneAndUpdate({admin: req.body.company}, {$push: {accounts: account._id}}, opts);
+                if(!user){
+                    new Error('Hesap oluşturulamadı.')
+                }
                 break;
             case 'customer':
-                await Customer.findByIdAndUpdate( req.customer._id, {$push: {accounts: account._id}}, opts);
+                const customer = await Customer.findByIdAndUpdate( req.body.customer, {$push: {accounts: account._id}}, opts);
+                if(!customer){
+                    new Error('Hesap oluşturulamadı.')
+                }
                 break;
             case 'personal':
-                await Personal.findByIdAndUpdate( req.personal._id, {$push: {accounts: account._id}}, opts);
+                const personal = await Personal.findByIdAndUpdate( req.body.personal, {$push: {accounts: account._id}}, opts);
+                if(!personal){
+                    new Error('Hesap oluşturulamadı.')
+                }
                 break;
             case 'dealer':
-                await Dealer.findByIdAndUpdate( req.dealer._id, {$push: {accounts: account._id}}, opts);
+                const dealer = await Dealer.findByIdAndUpdate( req.body.dealer, {$push: {accounts: account._id}}, opts);
+                if(!dealer){
+                    new Error('Hesap oluşturulamadı.')
+                }
                 break;
             default:
                 break;
@@ -57,13 +74,15 @@ const create = async (req, res) => {
         return res.status(200).json(account.filterProps());
         
     } catch (error) {
-        res.status(400).json({
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(400).json({
             error: error.message
         })
     }
 }
 
-const list = async (req, res) => {
+const listAll = async (req, res) => {
     try {
 
         let accounts = await Account.find({
@@ -160,7 +179,7 @@ const remove = async (req, res) => {
 
 module.exports = {
     create,
-    list,
+    listAll,
     view,
     findById,
     remove,
