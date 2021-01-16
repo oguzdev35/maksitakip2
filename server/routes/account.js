@@ -9,13 +9,13 @@ const dealerCtrl = require('../controllers/dealer.company');
 const router = express.Router();
 
 router.route('/api/account/company')
-    .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner ,accountCtrl.create);
+    .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner('create')('company') ,accountCtrl.create);
 router.route('/api/account/customer/:customerId')
-    .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner ,accountCtrl.create);
+    .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner('create')('customer') ,accountCtrl.create);
 router.route('/api/account/personal/:personalId')
-    .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner ,accountCtrl.create);
+    .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner('create')('personal') ,accountCtrl.create);
 router.route('/api/account/dealer/:dealerId')
-    .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner ,accountCtrl.create);
+    .post(authCtrl.requireSignin, accountCtrl.injectAccountOwner('create')('dealer') ,accountCtrl.create);
 
 router.route('/api/accounts')
     .get(authCtrl.requireSignin, accountCtrl.list);

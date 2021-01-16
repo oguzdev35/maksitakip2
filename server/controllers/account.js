@@ -6,9 +6,11 @@ const Dealer = require('../models/dealer.company');
 const extend = require('lodash/extend');
 const mongoose = require('../database').mongoDb;
 
-const injectAccountOwner = async (req, res, next) => {
+const injectAccountOwner = (operation) => (owner_type) => async (req, res, next) => {
 
-        req.owner_type = req.path?.split('/')[3];
+    if(operation == 'create'){
+
+        req.owner_type = owner_type;
         req.body = {
             ...req.body,
             company: req.owner_type == 'company' ? true : false,
@@ -16,7 +18,10 @@ const injectAccountOwner = async (req, res, next) => {
             personal: req.personal_company?._id,
             dealer: req.dealer_company?._id
         }
-        next();
+
+    }
+
+    next();
 }
 
 
