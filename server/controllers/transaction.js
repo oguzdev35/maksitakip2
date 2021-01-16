@@ -33,12 +33,28 @@ const transfer = async (req, transaction, opts, session) => {
 
 
  
-    if(req.body.type == 9){
+    if(req.body.type == 10){
         const customer = await Customer.findOne({
             _id: req.meta.query.source.customer
         }).session(session);
 
         await customer.services.selled.push({
+            service: req.body.serviceId,
+            startDate: req.body.startDate,
+            duration: req.body.duration
+        });
+
+        await customer.save();
+
+        console.log(JSON.stringify(customer, null, 4));
+    }
+
+    if(req.body.type == 9){
+        const customer = await Customer.findOne({
+            _id: req.meta.query.source.customer
+        }).session(session);
+
+        await customer.services.bought.push({
             service: req.body.serviceId,
             startDate: req.body.startDate,
             duration: req.body.duration
@@ -228,11 +244,11 @@ const injectBodyProps = type => async (req, res, next) => {
                 break;   
             case 9:
                 req.meta.query = {
-                    source: {
+                    dest: {
                         _id: req.params.sourceAccountId,
                         customer: req.params.customerId
                     },
-                    dest: {
+                    source: {
                         _id: req.params.destAccountId,
                         company: true
                     }
@@ -240,21 +256,21 @@ const injectBodyProps = type => async (req, res, next) => {
                 accountDest = await Account.findOne(req.meta.query.dest);
                 accountSource = await Account.findOne(req.meta.query.source);
                 if(!accountDest){
-                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
                 }
                 if(!accountSource){
-                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
                 }
                 req.meta.initialBalance.dest = accountDest.balance;
                 req.meta.initialBalance.source = accountSource.balance;
                 break;
             case 10:
                 req.meta.query = {
-                    dest: {
+                    source: {
                         _id: req.params.destAccountId,
                         customer: req.params.customerId
                     },
-                    source: {
+                    dest: {
                         _id: req.params.sourceAccountId,
                         company: true
                     }
@@ -262,10 +278,10 @@ const injectBodyProps = type => async (req, res, next) => {
                 accountDest = await Account.findOne(req.meta.query.dest);
                 accountSource = await Account.findOne(req.meta.query.source);
                 if(!accountSource){
-                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
                 }
                 if(!accountDest){
-                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
                 }
                 req.meta.initialBalance.dest = accountDest.balance;
                 req.meta.initialBalance.source = accountSource.balance;
