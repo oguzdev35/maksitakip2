@@ -97,6 +97,8 @@ const create = async (req, res) => {
                     throw new Error('İşlem oluşturulamadı.')
                 }
                 break;
+
+            
             default:
                 break;
         };

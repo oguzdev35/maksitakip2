@@ -6,6 +6,25 @@ const personalCtrl = require('../controllers/personal.company');
 const dealerCtrl = require('../controllers/dealer.company');
 const customerCtrl = require('../controllers/customer');
 
+/** from models/transactions
+ * transfer: {
+ *      1: transfer Money from external to Company
+ *      2: transfer Money from Company from external
+ *      3: transfer Money from Personal to Company
+ *      4: transfer Money from Company from Personal
+ *      5: transfer Money from Dealer to Company
+ *      6: transfer Money from Company from Dealer
+ *      7: transfer Money from Dealer to Personal
+ *      8: transfer Money from Personal from Dealer
+ *      9: transfer Service from Customer to Company
+ *      10: transfer Service from Company from Customer
+ *      11: transfer Product from Customer to Company
+ *      12: transfer Product from Company from Customer
+ *      13: transfer Money from Customer to Company
+ *      14: transfer Money from Company from Customer
+ * }
+ */
+
 const router = express.Router();
 
 router.route('/api/transaction/from/external/to/company/:destAccountId')
