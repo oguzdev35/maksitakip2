@@ -39,17 +39,17 @@ router.route('/api/transaction/from/personal/:personalId/:sourceAccountId/to/com
 router.route('/api/transaction/from/company/:sourceAccountId/to/personal/:personalId/:destAccountId')
     .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(4), transactionCtrl.create)
 
-router.route('/api/transaction/from/dealer/:dealerId/:accountId/to/company/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/from/dealer/:dealerId/:sourceAccountId/to/company/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(5), transactionCtrl.create)
 
-router.route('/api/transaction/from/company/to/dealer/:accountId/:dealerId/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/from/company/:sourceAccountId/to/dealer/:dealerId/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(6), transactionCtrl.create)
 
-router.route('/api/transaction/from/dealer/:dealerId/:accountId/to/personal/:personalId/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/from/dealer/:dealerId/:sourceAccountId/to/personal/:personalId/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(7), transactionCtrl.create)
 
-router.route('/api/transaction/from/personal/:personalId/:accountId/to/dealer/:dealerId/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/from/personal/:personalId/:sourceAccountId/to/dealer/:dealerId/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(8), transactionCtrl.create)
 
 router.route('/api/transaction/service/from/customer/:customerId/:accountId/to/company/:accountId')
     .post(authCtrl.requireSignin)
