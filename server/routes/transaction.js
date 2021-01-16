@@ -51,22 +51,22 @@ router.route('/api/transaction/from/dealer/:dealerId/:sourceAccountId/to/persona
 router.route('/api/transaction/from/personal/:personalId/:sourceAccountId/to/dealer/:dealerId/:destAccountId')
     .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(8), transactionCtrl.create)
 
-router.route('/api/transaction/service/from/customer/:customerId/:accountId/to/company/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/service/from/customer/:customerId/:sourceAccountId/to/company/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(9), transactionCtrl.create)
 
-router.route('/api/transaction/service/from/company/:accountId/to/customer/:customerId/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/service/from/company/:sourceAccountId/to/customer/:customerId/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(10), transactionCtrl.create)
 
-router.route('/api/transaction/product/from/customer/:customerId/:accountId/to/company/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/product/from/customer/:customerId/:sourceAccountId/to/company/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(11), transactionCtrl.create)
 
-router.route('/api/transaction/product/from/company/:accountId/to/customer/:customerId/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/product/from/company/:sourceAccountId/to/customer/:customerId/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(12), transactionCtrl.create)
 
-router.route('/api/transaction/from/customer/:customerId/:accountId/to/company/:accountId')
-    .post(authCtrl.requireSignin)
+router.route('/api/transaction/from/customer/:customerId/:sourceAccountId/to/company/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(13), transactionCtrl.create)
 
-router.route('/api/transaction/from/company/:accountId/to/customer/:customerId/:accountId')
-    .post(authCtrl.requireSignin);
+router.route('/api/transaction/from/company/:sourceAccountId/to/customer/:customerId/:destAccountId')
+    .post(authCtrl.requireSignin, transactionCtrl.injectBodyProps(14), transactionCtrl.create)
 
 module.exports = router;

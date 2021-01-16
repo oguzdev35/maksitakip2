@@ -165,11 +165,11 @@ const injectBodyProps = type => async (req, res, next) => {
             case 7:
                 req.meta.query = {
                     source: {
-                        _id: req.params.destAccountId,
+                        _id: req.params.sourceAccountId,
                         personal: req.params.personalId
                     },
                     dest: {
-                        _id: req.params.sourceAccountId,
+                        _id: req.params.destAccountId,
                         dealer: req.params.dealerId
                     }
                 }
@@ -202,6 +202,138 @@ const injectBodyProps = type => async (req, res, next) => {
                 }
                 if(!accountDest){
                     throw new Error('Bu kasa hesabı personele bağlı değildir.')
+                }
+                req.meta.initialBalance.dest = accountDest.balance;
+                req.meta.initialBalance.source = accountSource.balance;
+                break;   
+            case 9:
+                req.meta.query = {
+                    source: {
+                        _id: req.params.sourceAccountId,
+                        customer: req.params.customerId
+                    },
+                    dest: {
+                        _id: req.params.destAccountId,
+                        company: true
+                    }
+                }
+                accountDest = await Account.findOne(req.meta.query.dest);
+                accountSource = await Account.findOne(req.meta.query.source);
+                if(!accountDest){
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                }
+                if(!accountSource){
+                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
+                }
+                req.meta.initialBalance.dest = accountDest.balance;
+                req.meta.initialBalance.source = accountSource.balance;
+                break;
+            case 10:
+                req.meta.query = {
+                    dest: {
+                        _id: req.params.destAccountId,
+                        customer: req.params.customerId
+                    },
+                    source: {
+                        _id: req.params.sourceAccountId,
+                        company: true
+                    }
+                }
+                accountDest = await Account.findOne(req.meta.query.dest);
+                accountSource = await Account.findOne(req.meta.query.source);
+                if(!accountSource){
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                }
+                if(!accountDest){
+                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
+                }
+                req.meta.initialBalance.dest = accountDest.balance;
+                req.meta.initialBalance.source = accountSource.balance;
+                break;   
+            case 11:
+                req.meta.query = {
+                    source: {
+                        _id: req.params.sourceAccountId,
+                        customer: req.params.customerId
+                    },
+                    dest: {
+                        _id: req.params.destAccountId,
+                        company: true
+                    }
+                }
+                accountDest = await Account.findOne(req.meta.query.dest);
+                accountSource = await Account.findOne(req.meta.query.source);
+                if(!accountDest){
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                }
+                if(!accountSource){
+                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
+                }
+                req.meta.initialBalance.dest = accountDest.balance;
+                req.meta.initialBalance.source = accountSource.balance;
+                break;
+            case 12:
+                req.meta.query = {
+                    dest: {
+                        _id: req.params.destAccountId,
+                        customer: req.params.customerId
+                    },
+                    source: {
+                        _id: req.params.sourceAccountId,
+                        company: true
+                    }
+                }
+                accountDest = await Account.findOne(req.meta.query.dest);
+                accountSource = await Account.findOne(req.meta.query.source);
+                if(!accountSource){
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                }
+                if(!accountDest){
+                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
+                }
+                req.meta.initialBalance.dest = accountDest.balance;
+                req.meta.initialBalance.source = accountSource.balance;
+                break;   
+            case 13:
+                req.meta.query = {
+                    source: {
+                        _id: req.params.sourceAccountId,
+                        customer: req.params.customerId
+                    },
+                    dest: {
+                        _id: req.params.destAccountId,
+                        company: true
+                    }
+                }
+                accountDest = await Account.findOne(req.meta.query.dest);
+                accountSource = await Account.findOne(req.meta.query.source);
+                if(!accountDest){
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                }
+                if(!accountSource){
+                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
+                }
+                req.meta.initialBalance.dest = accountDest.balance;
+                req.meta.initialBalance.source = accountSource.balance;
+                break;
+            case 14:
+                req.meta.query = {
+                    dest: {
+                        _id: req.params.destAccountId,
+                        customer: req.params.customerId
+                    },
+                    source: {
+                        _id: req.params.sourceAccountId,
+                        company: true
+                    }
+                }
+                accountDest = await Account.findOne(req.meta.query.dest);
+                accountSource = await Account.findOne(req.meta.query.source);
+                if(!accountSource){
+                    throw new Error('Bu kasa hesabı şirkete bağlı değildir.')
+                }
+                if(!accountDest){
+                    throw new Error('Bu kasa hesabı müşteriye bağlı değildir.')
                 }
                 req.meta.initialBalance.dest = accountDest.balance;
                 req.meta.initialBalance.source = accountSource.balance;
