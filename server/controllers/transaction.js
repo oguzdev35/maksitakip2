@@ -38,6 +38,10 @@ const transfer = async (req, transaction, opts, session) => {
             _id: req.meta.query.source.customer
         }).session(session);
 
+        if(!customer){
+            throw new Error('İşlem yapılamadı.')
+        }
+
         await customer.services.selled.push({
             service: req.body.serviceId,
             startDate: req.body.startDate,
@@ -46,13 +50,16 @@ const transfer = async (req, transaction, opts, session) => {
 
         await customer.save();
 
-        console.log(JSON.stringify(customer, null, 4));
     }
 
     if(req.body.type == 9){
         const customer = await Customer.findOne({
-            _id: req.meta.query.source.customer
+            _id: req.meta.query.dest.customer
         }).session(session);
+
+        if(!customer){
+            throw new Error('İşlem yapılamadı.')
+        }
 
         await customer.services.bought.push({
             service: req.body.serviceId,
@@ -62,7 +69,6 @@ const transfer = async (req, transaction, opts, session) => {
 
         await customer.save();
 
-        console.log(JSON.stringify(customer, null, 4));
     }
 
 }
