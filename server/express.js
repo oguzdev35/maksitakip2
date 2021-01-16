@@ -28,6 +28,7 @@ app.use('/', require('./routes/inventory'));
 app.use('/', require('./routes/service'));
 app.use('/', require('./routes/customer'));
 app.use('/', require('./routes/account'));
+app.use('/', require('./routes/transaction'));
 
 app.get('/', (req, res) => {
     res.send('Maksitakip WEB API Services');
