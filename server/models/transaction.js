@@ -42,7 +42,6 @@ const TransactionSchema = new mongoose.Schema({
         store: {type: mongoose.Schema.ObjectId, ref: 'Store'},
         amount: {
             type: Number,
-            default: 0
         },
     },
     createdAt: {

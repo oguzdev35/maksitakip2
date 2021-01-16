@@ -41,31 +41,31 @@ const create = async (req, res) => {
     try {
         let [account] = await Account.create([req.body], opts);
         if(!account){
-            new Error('Hesap oluşturulamadı.')
+            throw new Error('Hesap oluşturulamadı.')
         }
         switch (req.owner_type) {
             case 'company':
                 const user = await User.findOneAndUpdate({admin: req.body.company}, {$push: {accounts: account._id}}, opts);
                 if(!user){
-                    new Error('Hesap oluşturulamadı.')
+                    throw new Error('Hesap oluşturulamadı.')
                 }
                 break;
             case 'customer':
                 const customer = await Customer.findByIdAndUpdate( req.body.customer, {$push: {accounts: account._id}}, opts);
                 if(!customer){
-                    new Error('Hesap oluşturulamadı.')
+                    throw new Error('Hesap oluşturulamadı.')
                 }
                 break;
             case 'personal':
                 const personal = await Personal.findByIdAndUpdate( req.body.personal, {$push: {accounts: account._id}}, opts);
                 if(!personal){
-                    new Error('Hesap oluşturulamadı.')
+                   throw new Error('Hesap oluşturulamadı.')
                 }
                 break;
             case 'dealer':
                 const dealer = await Dealer.findByIdAndUpdate( req.body.dealer, {$push: {accounts: account._id}}, opts);
                 if(!dealer){
-                    new Error('Hesap oluşturulamadı.')
+                    throw new Error('Hesap oluşturulamadı.')
                 }
                 break;
             default:
