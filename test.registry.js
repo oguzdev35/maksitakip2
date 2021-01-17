@@ -1,1 +1,1 @@
-require('./test/root');
+require('./test/index');
