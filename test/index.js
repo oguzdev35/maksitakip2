@@ -1,14 +1,14 @@
 const expect = require('chai').expect;
-const Axios = require('axios').default;
-const handleError = require('./utility/error.handle').handleError; 
-
-const url = 'http://localhost:3000/';
+const {handleAxiosError} = require('./utility/error.handle'); 
+const Axios = require('./utility/axios');
+const createHeader = require('./utility/create_header');
 
 describe('Testing the root path', () => {
     it('returns status 200', async () => {
-        return await Axios({method: 'GET',url: url}).then( res => {
+        return await Axios({method: 'GET',url: '/', headers: createHeader('hello'), timeout: 100}).then( res => {
             expect(res.status).equal(200);
-        }).catch(handleError);
+            
+        }).catch(handleAxiosError);
     });
 });
 

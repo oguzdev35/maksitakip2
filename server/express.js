@@ -31,6 +31,7 @@ app.use('/', require('./routes/account'));
 app.use('/', require('./routes/transaction'));
 
 app.get('/', (req, res) => {
+    console.log(req.headers)
     res.send('Maksitakip WEB API Services');
 });
 
