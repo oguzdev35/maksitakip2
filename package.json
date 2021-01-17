@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "mocha 'test.registry.js' --reporter spec"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
@@ -17,5 +20,11 @@
     "mongoose": "^5.11.11",
     "morgan": "^1.10.0",
     "yup": "^0.32.8"
+  },
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "chai": "^4.2.0",
+    "ioredis": "^4.19.4",
+    "mocha": "^8.2.1"
   }
 }
