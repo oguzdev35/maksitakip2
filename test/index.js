@@ -8,6 +8,6 @@ describe('Testing the root path', () => {
     before( async () => {
         result = await Axios({method: 'GET',url: '/'}).catch(handleAxiosError);
     })
-    it('returns status 200', async () => {expect(result.status).equal(200);});
+    it('should returns status 200', async () => {expect(result.status).equal(200);});
 });
 
