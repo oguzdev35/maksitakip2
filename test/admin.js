@@ -5,8 +5,9 @@ const createHeader = require('./utility/create_header');
 const redis = require('./utility/redis');
 
 describe('Testing Admin Profile Management', async () => {
-    let response = undefined;
+    
     await describe('creating admin profile', () => {
+        let response = undefined;
         before( async () => {
             response = await Axios({method: 'POST',url: '/api/admin', data: {
                 "name": "Admin",
@@ -24,6 +25,7 @@ describe('Testing Admin Profile Management', async () => {
     });
 
     await describe('not able to create more then one admin profile', () => {
+        let response = undefined;
         before( async () => {
             response = await Axios({method: 'POST',url: '/api/admin', data: {
                 "name": "Admin",
@@ -37,6 +39,7 @@ describe('Testing Admin Profile Management', async () => {
     });
 
     await describe('the admin profile logging in to the system', () => {
+        let response = undefined;
         before( async () => {
             response = await Axios({method: 'POST',url: '/api/auth/signin', data: {
                 "password": "123456",
