@@ -4,9 +4,9 @@ const Axios = require('./utility/axios');
 const createHeader = require('./utility/create_header');
 const redis = require('./utility/redis');
 
-describe('Testing Admin Profile Management', () => {
+describe('Testing Admin Profile Management', async () => {
     let response = undefined;
-    describe('creating admin profile', () => {
+    await describe('creating admin profile', () => {
         before( async () => {
             response = await Axios({method: 'POST',url: '/api/admin', data: {
                 "name": "Admin",
@@ -23,7 +23,7 @@ describe('Testing Admin Profile Management', () => {
         it('should returns status 200', async () => {expect(response.status).equal(200);});
     });
 
-    describe('not able to create more then one admin profile', () => {
+    await describe('not able to create more then one admin profile', () => {
         before( async () => {
             response = await Axios({method: 'POST',url: '/api/admin', data: {
                 "name": "Admin",
@@ -34,6 +34,17 @@ describe('Testing Admin Profile Management', () => {
             }}).catch(handleAxiosError);
         })
         it('should returns status 403', async () => {expect(response.status).equal(403);});
+    });
+
+    await describe('the admin profile logging in to the system', () => {
+        before( async () => {
+            response = await Axios({method: 'POST',url: '/api/auth/signin', data: {
+                "password": "123456",
+                "username": "admin",
+            }}).catch(handleAxiosError);
+            await redis.set('auth',response.data);
+        })
+        it('should returns status 200', async () => {expect(response.status).equal(200);});
     });
     
 })
