@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "mocha 'test.registry.js' --reporter spec"
+    "test": "mocha 'test.registry.js' --reporter spec --require mocha.env.js --require mocha.fixtures.js --exit"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
