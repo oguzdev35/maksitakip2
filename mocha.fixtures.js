@@ -1,4 +1,5 @@
 const {mongoDb} = require('./server/database');
+const redis = require('./test/utility/redis'); 
 
 module.exports = {
     mochaGlobalSetup: async function() {
@@ -11,6 +12,8 @@ module.exports = {
         await mongoDb.connection.db.dropDatabase();
         console.log('Database dropped.');
         await mongoDb.disconnect();
-        console.log('Database connection is closed.')
+        console.log('MongoDb connection is closed.')
+        await redis.disconnect();
+        console.log('Redis connection is closed.')
     }
 };
