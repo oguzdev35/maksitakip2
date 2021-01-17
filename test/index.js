@@ -4,11 +4,10 @@ const Axios = require('./utility/axios');
 const createHeader = require('./utility/create_header');
 
 describe('Testing the root path', () => {
-    it('returns status 200', async () => {
-        return await Axios({method: 'GET',url: '/'}).then( res => {
-            expect(res.status).equal(200);
-            
-        }).catch(handleAxiosError);
-    });
+    let result = undefined;
+    before( async () => {
+        result = await Axios({method: 'GET',url: '/'}).catch(handleAxiosError);
+    })
+    it('returns status 200', async () => {expect(result.status).equal(200);});
 });
 
