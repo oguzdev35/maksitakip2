@@ -6,6 +6,8 @@ module.exports = {
         console.log('Global Setup Initialized.');
         await mongoDb.connect(process.env.MONGODB_CONN_URI);
         console.log('Database connection is established.');
+        await mongoDb.connection.db.dropDatabase();
+        console.log('Database dropped.');
     },
     mochaGlobalTeardown: async function() {
         console.log('Global Teardown initialized.');

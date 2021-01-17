@@ -6,7 +6,7 @@ const redis = require('./utility/redis');
 const faker = require('faker');
 
 
-let fakePersonals = Array(faker.random.number(100)).fill({}).map( item => ({
+let fakePersonals = Array(faker.random.number({min: 1, max: 5})).fill({}).map( item => ({
     name: faker.lorem.words(2),
     username: faker.lorem.word(10),
     email: faker.internet.email(),
@@ -25,7 +25,9 @@ describe('Testing Company-Personal Management', async () => {
                 before( async () => {
                     response = await Axios({method: 'POST', url: '/api/company/personal', data: personalData, headers: createHeader(auth.token)}).catch(handleAxiosError);
                 })
-                it('should return status 200', async () => {expect(response.status).equal(200);});
+                it('should return status 200', async () => {
+                    expect(response.status).equal(200);
+                });
             });
         });
     })
