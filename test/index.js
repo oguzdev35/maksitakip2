@@ -5,7 +5,7 @@ const createHeader = require('./utility/create_header');
 
 describe('Testing the root path', () => {
     it('returns status 200', async () => {
-        return await Axios({method: 'GET',url: '/', headers: createHeader('hello'), timeout: 100}).then( res => {
+        return await Axios({method: 'GET',url: '/'}).then( res => {
             expect(res.status).equal(200);
             
         }).catch(handleAxiosError);
