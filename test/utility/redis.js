@@ -11,9 +11,13 @@ module.exports = {
         client.disconnect();
     },
     set: async (prop, value) =>  {
-        await client.set(prop, value);
+        await client.set(prop, JSON.stringify(value));
     },
     unset: async (prop) => {
         await client.del(prop);
+    },
+    get: async (prop) => {
+        const val = await client.get(prop)
+        return JSON.parse(val);
     }
 }
