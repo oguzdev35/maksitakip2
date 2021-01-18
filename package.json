@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "scripts": {
-    "test": "mocha 'test.registry.js' --reporter spec --require mocha.env.js --require mocha.fixtures.js --exit"
-  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
@@ -13,7 +10,6 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "express": "^4.17.1",
-    "faker": "^5.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "mongodb": "^3.6.3",
@@ -21,10 +17,5 @@
     "morgan": "^1.10.0",
     "yup": "^0.32.8"
   },
-  "devDependencies": {
-    "axios": "^0.21.1",
-    "chai": "^4.2.0",
-    "ioredis": "^4.19.4",
-    "mocha": "^8.2.1"
-  }
+  "devDependencies": {}
 }
