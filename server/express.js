@@ -7,6 +7,7 @@ const cors = require('cors');
 
 const app = express();
 
+
 app.use(morgan('common'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -15,6 +16,7 @@ app.use(compression());
 app.use(cors());
 
 // Api Routing
+
 app.use('/', require('./routes/admin'));
 app.use('/', require('./routes/user')); 
 app.use('/', require('./routes/auth'));
@@ -29,11 +31,9 @@ app.use('/', require('./routes/service'));
 app.use('/', require('./routes/customer'));
 app.use('/', require('./routes/account'));
 app.use('/', require('./routes/transaction'));
+app.use('/', require('./routes/base'));
 
-app.get('/', (req, res) => {
-    console.log(req.headers)
-    res.send('Maksitakip WEB API Services');
-});
+
 
 
 

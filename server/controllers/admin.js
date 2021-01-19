@@ -5,6 +5,7 @@ const pick = require('lodash/pick');
 const checkForAdminExistence = async (req, res, next) => {
     try {
 
+
         const admin = await User.findOne({
             admin: true
         });
@@ -19,7 +20,7 @@ const checkForAdminExistence = async (req, res, next) => {
         
     } catch (error) {
         res.status(400).json({
-            error: error.message
+            message: error.message
         })
     }
 } 
@@ -35,7 +36,7 @@ const create = async (req, res) => {
         
     } catch (error) {
         res.status(400).json({
-            error: error.message
+            message: error.message
         })
     }
 }
