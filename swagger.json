@@ -57,6 +57,20 @@
             "format": "date"
           }
         }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
       }
     },
     "requestBodies": {
@@ -90,6 +104,18 @@
           }
         }
       }
+    },
+    "responses": {
+      "400": {
+        "description": "Unexpected error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
     }
   },
   "paths": {
@@ -98,6 +124,8 @@
         "tags": [
           "admin"
         ],
+        "summary": "Creating an admin profile",
+        "description": "- Only App Maintainer is able to use this.\n- You can create an admin profile using this API.\n- Only one admin profile can be created\n",
         "responses": {
           "200": {
             "description": "Successfully create an Admin Profile",
@@ -105,6 +133,19 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "403": {
+            "description": "You can ony create one admin profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
