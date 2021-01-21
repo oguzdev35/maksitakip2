@@ -30,7 +30,7 @@ const create = async (req, res) => {
         req.body.admin = true;
         let user = await User.create(req.body);
 
-        user = pick(user, ['id', 'name', 'username', 'email', 'createdAt']);
+        user = pick(user, ['id', 'name', 'email', 'createdAt']);
 
         return res.status(200).json(user);
         

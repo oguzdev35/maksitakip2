@@ -7,12 +7,12 @@ const signin = async (req, res) => {
     try {
 
         const {
-            username, email,
+            email,
             password
         } = req.body;
     
         let user = await User.findOne({
-            $or: [{email}, {username}]
+            email
         });
     
         if(!user){

@@ -5,17 +5,7 @@ const pick = require('lodash/pick');
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: 'Kullanıcı İsim ve Soyisim gereklidir.',
         trim: true
-    },
-    username: {
-        type: String,
-        trim: true,
-        required: 'Kullanıcı adı gereklidir',
-        index: {
-            unique: 'Kullanıcı adı sistemimizde kayıtlıdır.',
-            partialFilterExpression: {username: {$type: "string"}}
-        }
     },
     email: {
         type: String,
@@ -119,13 +109,13 @@ UserSchema.methods = {
         return;
     },
     filterProps: function(){
-        return pick(this, ['_id', 'name', 'username', 'email', 'createdAt', 'updatedAt']);
+        return pick(this, ['_id', 'name', 'email', 'createdAt', 'updatedAt']);
     },
     filterAuthProps: function(){
-        return pick(this, ['_id', 'name', 'username', 'email', 'createdAt', 'admin']);
+        return pick(this, ['_id', 'name', 'email', 'createdAt', 'admin']);
     },
     filterForUpdate: function(obj){
-        return pick(obj, ['name', 'username', 'email', 'password']);
+        return pick(obj, ['name', 'email', 'password']);
     },
     filterForCompanyInfoInsertation: function(obj){
         return pick(obj, [ 'name', 'address', 'contact_person', 'phone1', 'phone2', 'fax', 'email', 'website', 'tax_office', 'company_title', 'tax_number', 'info'])
@@ -154,9 +144,7 @@ const handleValidation = function(error, res, next) {
             break;
         case 'MongoError':
             if(error.code == '11000'){
-                if(error.keyValue.username){
-                    next(new Error('Bu kullanıcı adı sistemimizde kayıtlıdır.'))
-                } else if(error.keyValue.email){
+                if(error.keyValue.email){
                     next(new Error('Bu Eposta adresi sistemimizde kayıtlıdır.'));
                 }
             }
